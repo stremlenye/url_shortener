@@ -1,0 +1,16 @@
+.DS_Store
+target
+*.class
+.idea/
+*.ipr
+*.iws
+*.log
+#?/
+logs/
+#gc.data*
+*/secrets_*
+#\?
+bin/accessTokenBitbucket.json
+.bloop/
+.metals/
+.vscode/

@@ -1,0 +1,7 @@
+version: '3.0'
+
+services:
+  local_postgres:
+    build: ./docker/postgres
+    ports:
+      - "8102:5432"
