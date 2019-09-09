@@ -5,6 +5,7 @@ import java.sql.SQLException
 import doobie.free.connection.ConnectionIO
 import doobie.util.invariant._
 
+/** Wrapper for the SQL exceptions to provide insight onto the db layer errors */
 abstract class PersistenceException(message: String, cause: Throwable) extends RuntimeException(message, cause) {
   def this(message: String) = this(message, null: Throwable)
   def this(cause: Throwable) = this(cause.getMessage, cause)

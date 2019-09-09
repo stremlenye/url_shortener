@@ -1,9 +1,5 @@
 package eu.ankudinov.urlshortener.apis
 
-import cats.data.{EitherT, Kleisli}
-import cats.effect.IO
-import cats.{MonadError, ~>}
-import doobie.util.transactor.Transactor
 import eu.ankudinov.urlshortener.algebras.{LazyLoggerAlgebra, UrlRepositoryAlgebra, UrlShortenerAlgebra}
 import eu.ankudinov.urlshortener.common.{LiftError, PersistenceException, executors}
 import eu.ankudinov.urlshortener.config.Config
@@ -15,13 +11,17 @@ import eu.ankudinov.urlshortener.services.UrlShortenerService.{FullUrlNotFound, 
 import eu.ankudinov.urlshortener.services.{IdGen, UrlShortenerService}
 import eu.ankudinov.urlshortener.common.conversions._
 import eu.ankudinov.urlshortener.common.future._
+import eu.ankudinov.urlshortener.services.IdGen.IdGenException
 import io.finch._
 import io.finch.circe._
 import io.finch.syntax._
 import cats.syntax.apply._
 import cats.tagless.syntax.functorK._
+import cats.data.{EitherT, Kleisli}
+import cats.effect.IO
+import cats.{MonadError, ~>}
+import doobie.util.transactor.Transactor
 import com.twitter.finagle.http.Status
-import eu.ankudinov.urlshortener.services.IdGen.IdGenException
 
 class UrlShortenerApi(service: UrlShortenerAlgebra[HttpHandler]) {
   val root = "api"

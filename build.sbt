@@ -18,7 +18,6 @@ val dbName = Option(System.getenv("POSTGRES_DB_NAME")).getOrElse("postgres")
 val dockerLocalDependencies = settingKey[File]("Local docker-compose dependencies file.")
 val localDependenciesUp = taskKey[Unit]("Spins up the local docker dependencies for this project.")
 val localDependenciesDown = taskKey[Unit]("Tears down the local docker dependencies for this project.")
-val verify = taskKey[Unit]("Runs the unit and integration tests for this project.")
 
 lazy val root = (project in file("."))
   .settings(
@@ -49,14 +48,6 @@ lazy val root = (project in file("."))
       val dockerFile = dockerLocalDependencies.value.getAbsolutePath
       Process(Seq("docker-compose", "-f", dockerFile, "down"), cwd) ! log
     },
-    verify := Def
-      .sequential(
-        localDependenciesUp,
-        test in Test,
-        flywayMigrate in ThisProject,
-        test in IntegrationTest,
-        localDependenciesDown
-      ).value,
     Defaults.itSettings,
     fork in Test := true,
     fork in IntegrationTest := true

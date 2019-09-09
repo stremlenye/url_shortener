@@ -6,6 +6,7 @@ import com.twitter.util.Future
 import io.finch._
 import io.finch.syntax.{Mapper, ToTwitterFuture}
 
+/** Http layer related helpers  */
 package object http {
   type HttpHandler[A] = Kleisli[Future, Request, Output[A]]
 

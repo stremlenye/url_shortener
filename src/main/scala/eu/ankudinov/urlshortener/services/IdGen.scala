@@ -15,6 +15,12 @@ import eu.ankudinov.urlshortener.domain.Id
 import eu.ankudinov.urlshortener.numeric.NumericEncoding
 import eu.ankudinov.urlshortener.services.IdGen.{EncodingFailure, FailedGenerateNonNegativeNumber, IdGenException, NumberGenerationFailure}
 
+/**
+  * Ids generator which utilises [[java.security.SecureRandom]] to generate keys
+  * then being encoded into String using [[eu.ankudinov.urlshortener.numeric.NumericEncoding]]
+  * @param prefix The char used as the id prefix. Allows the generated keys to be unique across instances if said instances configured with
+  *               unique prefixes.
+  */
 class IdGen[F[_]](prefix: Char)(implicit F: MonadError[F, IdGenException]) extends IdGenAlgebra[F] {
   private val secureRandom = new SecureRandom()
 
@@ -22,12 +28,16 @@ class IdGen[F[_]](prefix: Char)(implicit F: MonadError[F, IdGenException]) exten
     for {
       key <- generateNonNegativeNumber
       value <- F.fromEither(encode(key))
-    } yield Id((prefix + value))
+    } yield Id(prefix + value)
 
+  /**
+    * Method generates the non negative number recursively calling the generator till one matching the criteria found.
+    * The number has top boundary of [[IdGen.max]] being is the last number which encoded representation fits into
+    * 7 characters limit.
+    */
   private def generateNonNegativeNumber: F[Long] =
     F.tailRecM(FailedGenerateNonNegativeNumber: IdGenException)(
-      _ =>
-        F.pure(generateNumber).map(_.map(adjust)).map(_.ensure(FailedGenerateNonNegativeNumber)(a => a >= 0 && a <= IdGen.max))
+      _ => F.pure(generateNumber).map(_.map(adjust)).map(_.ensure(FailedGenerateNonNegativeNumber)(a => a >= 0 && a <= IdGen.max))
     )
 
   private def generateNumber: Either[NumberGenerationFailure, Long] =
@@ -36,18 +46,22 @@ class IdGen[F[_]](prefix: Char)(implicit F: MonadError[F, IdGenException]) exten
   private def encode(key: Long): Either[EncodingFailure, String] =
     Either.catchNonFatal(NumericEncoding.encode(key)).leftMap(EncodingFailure.apply)
 
+  /**
+    * Convenience method adjusting numbers exceeding the top boundary
+    */
   private def adjust(a: Long): Long = math.abs {
     if (a > IdGen.max) {
       val x = a.toDouble / IdGen.adjuster
-      ((x - x.toLong) * IdGen.adjuster / 100).toLong
+      math.signum(a) * ((x - x.toLong) * IdGen.adjuster / 100).toLong
     } else a
   }
 }
 
 object IdGen {
 
-  val max = 208422380088L
-  val adjuster = 100000000000L
+  //Top boundary computed by NumericEncoding.decode("......") where '.' is the last character of the encoding alphabet hence biggest number.
+  val max = 17565568854911L
+  val adjuster = 100000000000000L
 
   def apply[F[_] : Functor, E](prefix: Char)(implicit liftError: LiftError[IdGenException, E], F: MonadError[F, E]): IdGenAlgebra[F] = {
     type G[A] = EitherT[F, IdGenException, A]

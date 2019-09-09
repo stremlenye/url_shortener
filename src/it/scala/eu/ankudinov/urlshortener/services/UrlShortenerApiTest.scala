@@ -24,6 +24,12 @@ class UrlShortenerApiTest extends fixture.FunSuite with Matchers with ServiceSui
     assert(service(Input.get(s"/nonexistentid").request).status == Status.NotFound)
   }
 
+  test("Service should return 400 for malformed request") { service =>
+    val payload = s""" { "url": "::::::"  } """.asJson
+    val response = service(Input.post("/").withBody[Application.Json](payload).request)
+    assert(response.status == Status.BadRequest)
+  }
+
   test("Service should return short url on well-formatted request which redirects to the original") { service =>
     val originalUrl = "http://example.com/a/b/c"
     val payload = UrlCreate(AbsoluteUrl.parse(originalUrl)).asJson

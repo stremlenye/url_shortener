@@ -4,8 +4,8 @@ import eu.ankudinov.urlshortener.algebras.UrlRepositoryAlgebra
 import eu.ankudinov.urlshortener.common.{LiftError, PersistenceException}
 import eu.ankudinov.urlshortener.domain.{Id, UrlEntity}
 import eu.ankudinov.urlshortener.domain.types.Id._
-
 import eu.ankudinov.urlshortener.util.transformations
+
 import io.lemonlabs.uri.AbsoluteUrl
 
 import java.sql.Timestamp

@@ -5,6 +5,7 @@ import io.circe.generic.semiauto._
 import io.lemonlabs.uri.AbsoluteUrl
 import eu.ankudinov.urlshortener.common.codecs._
 
+/** User request payload model */
 final case class UrlCreate (url: AbsoluteUrl)
 
 object UrlCreate {

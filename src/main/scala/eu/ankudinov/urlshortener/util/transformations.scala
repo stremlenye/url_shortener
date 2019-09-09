@@ -8,6 +8,7 @@ import doobie.util.transactor.Transactor
 import doobie.implicits._
 import eu.ankudinov.urlshortener.common.{LiftError, PersistenceException}
 
+/** Common natural transformations used for contexts transformations */
 object transformations {
 
   def transactionalFallible[F[_], E <: Throwable](
