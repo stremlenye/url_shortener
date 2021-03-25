@@ -13,7 +13,7 @@ Global / credentials += {
     realm = "GitHub Package Registry",
     host = "maven.pkg.github.com",
     userName = "stremlenye",
-    passwd = "75a31ce653016feb184c36ede0411b3c3e77ea41"
+    passwd = "f6c26c59a4365b76779929f6ad015800b9df4c3c"
   )
 }
 
@@ -34,7 +34,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "url_shortener",
     organization := "stremlenye",
-    version := "0.0.5",
+    version := "0.0.1-SNAPSHOT",
     scalacOptions ++= compilerOptions,
     libraryDependencies ++= allDependencies,
     flywayUrl := s"jdbc:postgresql://$host:$port/$dbName",
