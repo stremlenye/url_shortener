@@ -8,6 +8,17 @@ ThisBuild / version := "0.1.0-SNAPSHOT"
 ThisBuild / organization := "coding-challenge-yuriy-ankudinov"
 ThisBuild / organizationName := "coding-challenge-yuriy-ankudinov"
 
+Global / credentials += {
+  Credentials(
+    realm = "GitHub Package Registry",
+    host = "maven.pkg.github.com",
+    userName = "stremlenye",
+    passwd = "75a31ce653016feb184c36ede0411b3c3e77ea41"
+  )
+}
+
+Global / resolvers += "GitHub Package Registry" at "https://maven.pkg.github.com/stremlenye/url_shortener"
+
 enablePlugins(FlywayPlugin)
 addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full)
 
@@ -21,7 +32,9 @@ val localDependenciesDown = taskKey[Unit]("Tears down the local docker dependenc
 
 lazy val root = (project in file("."))
   .settings(
-    name := "coding-challenge-yuriy-ankudinov",
+    name := "url_shortener",
+    organization := "stremlenye",
+    version := "0.0.5",
     scalacOptions ++= compilerOptions,
     libraryDependencies ++= allDependencies,
     flywayUrl := s"jdbc:postgresql://$host:$port/$dbName",
@@ -50,5 +63,6 @@ lazy val root = (project in file("."))
     },
     Defaults.itSettings,
     fork in Test := true,
-    fork in IntegrationTest := true
+    fork in IntegrationTest := true,
+    publishTo := Some("GitHub Package Registry" at "https://maven.pkg.github.com/stremlenye/url_shortener")
   ).configs(IntegrationTest)

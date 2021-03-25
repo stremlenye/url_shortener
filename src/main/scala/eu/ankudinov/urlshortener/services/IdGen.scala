@@ -16,8 +16,8 @@ import eu.ankudinov.urlshortener.numeric.NumericEncoding
 import eu.ankudinov.urlshortener.services.IdGen.{EncodingFailure, FailedGenerateNonNegativeNumber, IdGenException, NumberGenerationFailure}
 
 /**
-  * Ids generator which utilises [[java.security.SecureRandom]] to generate keys
-  * then being encoded into String using [[eu.ankudinov.urlshortener.numeric.NumericEncoding]]
+  * Ids generator which utilises  to generate keys
+  * then being encoded into String using
   * @param prefix The char used as the id prefix. Allows the generated keys to be unique across instances if said instances configured with
   *               unique prefixes.
   */

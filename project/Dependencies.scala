@@ -51,6 +51,7 @@ object Dependencies {
   lazy val scalaTest = "org.scalatest" %% "scalatest" % scalatestVersion % "it,test"
   lazy val scalaCheck = "org.scalacheck" %% "scalacheck" % scalacheckVersion % "it,test"
 
+
   lazy val allDependencies = Seq(
     cats,
     mtl,
